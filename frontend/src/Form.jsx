@@ -23,8 +23,7 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you can send the form data to the Django API
-    // You can use the 'spans' state to send the data for each span
+    //send form data to django api
     console.log(spans);
   };
 
@@ -115,7 +114,6 @@ const Form = () => {
             <option value="VDL_C">Variably distributed load, with the highest point at the center (VDL_C)</option>
           </select>
 
-          {/* Add more fields as needed */}
         </div>
       ))}
 
