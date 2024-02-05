@@ -8,4 +8,3 @@ def getRoutes(request):
     return Response(routes)
 
 @api_view(['POST'])
-def get 
