@@ -1,6 +1,6 @@
 from django.urls import path
-from .import views
+from .views import calculate_coordinates
 
-urlpatterns =[
-path('',views.getRoutes)
+urlpatterns = [
+    path('calculate-coordinates/', calculate_coordinates, name='calculate_coordinates'),
 ]
