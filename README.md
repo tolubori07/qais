@@ -6,8 +6,7 @@ clone the project from git using:
 git clone https://github.com/tolubori07/qais.git
 then to run the backend, cd into the main folder called 'qais', the cd into 'slope_deflection'
 to run the server do : Python3 manage.py runserver
-
-then opemn a new terminal and return back to the main folder called 'qais' by doing 'cd ..'
+open a new terminal window
 then cd into the folder called frontend
 then do "npm run dev"
 
