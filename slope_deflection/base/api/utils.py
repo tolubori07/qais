@@ -131,6 +131,16 @@ def beam_analysis(number_of_supports, number_of_internal_joints, spans_data):
             beam_spans[i].left_fem = 0
             print(f"No loading on span {i+1}")
 
+    list_of_end_moments = []
+    left_end = "a"
+    right_end = "b"
+    for i in range(number_of_spans):
+        beam_spans[i].left_moment, beam_spans[i].right_moment = symbols(f"M{left_end}{right_end} M{right_end}{left_end}")
+        left_end = chr(ord(left_end) + 1)
+        right_end = chr(ord(right_end) + 1)
+        list_of_end_moments.append(beam_spans[i].left_moment)
+        list_of_end_moments.append(beam_spans[i].right_moment)
+
     coordinates = []
     current_length = 0
     for i in range(number_of_spans):
@@ -213,7 +223,7 @@ def beam_analysis(number_of_supports, number_of_internal_joints, spans_data):
 
             for u in range(beam_spans[i].span_length):
                 x += u
-                sf -= beam_spans[i].load * u
+                sf -= int(beam_spans[i].load) * u
                 position_along_beam.append(x)
                 shear_forces.append(sf)
 
@@ -225,7 +235,7 @@ def beam_analysis(number_of_supports, number_of_internal_joints, spans_data):
 
             for u in range(beam_spans[i].span_length):
                 x += u
-                sf -= float(beam_spans[i].load * u)
+                sf -= (float(beam_spans[i].load) * u)
                 position_along_beam.append(x)
                 shear_forces.append(sf)
 
@@ -234,9 +244,9 @@ def beam_analysis(number_of_supports, number_of_internal_joints, spans_data):
                 x += beam_spans[i - 1].span_length
                 i -= 1
 
-            for u in range(int(beam_spans[i].span_length)/2):
+            for u in range(int(round(beam_spans[i].span_length)/2)):
                 x += u
-                sf -= beam_spans[i].load * u
+                sf -= int(beam_spans[i].load) * u
                 position_along_beam.append(x)
                 shear_forces.append(sf)
 
@@ -258,7 +268,7 @@ def beam_analysis(number_of_supports, number_of_internal_joints, spans_data):
 
             for u in range(beam_spans[i].span_length):
                 x += u
-                sf -= ((beam_spans[i].load * u)/beam_spans[i].span_length) * (2 - (u/beam_spans[i].span_length))
+                sf -= ((int(beam_spans[i].load) * u)/beam_spans[i].span_length) * (2 - (u/int(beam_spans[i].span_length)))
                 position_along_beam.append(x)
                 shear_forces.append(sf)
 
@@ -268,7 +278,7 @@ def beam_analysis(number_of_supports, number_of_internal_joints, spans_data):
         shear_forces.append(sf)
 
 
-    return coordinates, shear_forces
+    return position_along_beam, shear_forces
 
 # Example usage:
 # coordinates = beam_analysis(number_of_supports, number_of_internal_joints, spans_data)

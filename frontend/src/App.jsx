@@ -4,19 +4,23 @@ import axios from 'axios'
 import { useState } from 'react';
 import Plot from 'react-plotly.js'
 const App = () => {
-    const [numberOfSupports, setNumberOfSupports] = useState('');
-    const [numberOfInternalJoints, setNumberOfInternalJoints] = useState('');
+    const [numberOfSupports, setNumberOfSupports] = useState(0);
+    const [numberOfInternalJoints, setNumberOfInternalJoints] = useState(0);
     const [spans, setSpans] = useState([]);
     const [lengths,setLengths] = useState([]);
     const [forces,setForces] = useState([]);
-  
+    const [pointLoadDistance, setPointLoadDistance] = useState('');
+
     const handleInputChange = (index, e) => {
       const { name, value } = e.target;
       const updatedSpans = [...spans];
       updatedSpans[index][name] = value;
       setSpans(updatedSpans);
     };
-   
+    const handlePointLoadDistanceChange = (e) => {
+      setPointLoadDistance(e.target.value);
+    };
+
     const handleLoadingConditionChange = (index, e) => {
       const { value } = e.target;
       const updatedSpans = [...spans];
@@ -27,18 +31,19 @@ const App = () => {
     const handleSubmit = async(e) => {
       e.preventDefault()
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/calculate-coordinates/', {
-          number_of_supports: numberOfSupports,
-          number_of_internal_joints: numberOfInternalJoints,
-          spans: spans
-        });
+          const response = await axios.post('http://127.0.0.1:8000/api/calculate-coordinates/', {
+              number_of_supports: numberOfSupports,
+              number_of_internal_joints: numberOfInternalJoints,
+              spans: spans,
+              span_a_value: pointLoadDistance // Include point load distance in the API request
+          });
   
-        setLengths(response.data.coordinates)
-        setForces(response.data.shearforce)
+          setLengths(response.data.coordinates)
+          setForces(response.data.shearforce)
       } catch (error) {
-        console.error('Error:', error);
+          console.error('Error:', error);
       }
-    };
+  };
   
     const calculateNumberOfSpans = () => {
       const numSupports = parseInt(numberOfSupports);
@@ -107,7 +112,14 @@ const App = () => {
               value={span.load || ''}
               onChange={(e) => handleInputChange(index, e)}
             />
-  
+     <label className="block text-gray-700 text-sm font-bold mb-2">Distance from Point Load to Left End Joint:</label>
+                    <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="number"
+                        value={pointLoadDistance}
+                        onChange={handlePointLoadDistanceChange}
+                        placeholder='meant for P_X'
+                    />
             <label className="block text-gray-700 text-sm font-bold mb-2">Loading Condition:</label>
             <select
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
