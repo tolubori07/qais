@@ -10,4 +10,4 @@ open a new terminal window
 then cd into the folder called frontend
 then do "npm run dev"
 
-###Good luck soldier
+### Good luck soldier
